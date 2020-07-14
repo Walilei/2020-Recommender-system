@@ -9,8 +9,6 @@ for product in product_list:
     # 用BS處理HTML編碼，修改產品名稱內的亂碼，並去除換行符號
     product['name'] = BeautifulSoup(product['name'], 'lxml').text
     product['name'] = product['name'].replace("&amp;", "&").replace('\n', '')
-    if '\n' in product['name']:
-        print(product['name'])
 
     # 價格修改，先去除$符號和千分位逗號方便清洗
     product['price'] = product['price'].replace('$', '').replace(',', '')
