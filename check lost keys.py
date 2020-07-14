@@ -14,5 +14,4 @@ key_set = set(keywords['product_name'])
 
 # 兩個集合相比對，抓出沒有結果的keywords
 loss_set = key_set - product_keyset
-loss_list = list(loss_set)
-print(len(loss_list))
+print(loss_set)
