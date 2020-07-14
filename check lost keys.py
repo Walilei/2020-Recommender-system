@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-# 匯入Amy程式完成後的檔案，要事先檢查內容格式，確認是完整的list
+# 匯入Amy程式完成後的檔案，要事先修改內容格式，確認是完整的list
 with open('product_info_LA2.json', 'r', encoding='utf-8') as results:
     results_list = json.loads(results.read())
 product_keyset = set()  # 整理出有抓出東西的keywords集合
