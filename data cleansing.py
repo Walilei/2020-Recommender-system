@@ -31,7 +31,7 @@ for product in product_list:
             # 取出區間的最大與最小值，算平均價格
             low_p = float(product['price'].partition('-')[0])
             high_p = float(product['price'].partition('-')[2])
-            product['price'] = round((low_p + high_p)/2, 2)
+            product['price'] = round((low_p + high_p) / 2, 2)
         else:
             continue
 
@@ -40,7 +40,7 @@ for product in product_list:
 
     # description一樣要去掉trade mark跟換行
     redundant1 = 'PACKAGING MAY VARY BY LOCATION'
-    product['description'] = product['description'].replace('™', '').replace('\n', '').replace('*', '')
+    product['description'] = product['description'].replace('™', '').replace('\n', '').replace('*', '').replace('\r', '')
     product['description'] = product['description'].replace('|', '').replace('\\', '').replace('½', 'half')
     product['description'] = product['description'].replace(redundant1, '').strip('-')
 
@@ -66,7 +66,7 @@ for product in product_list:
 
     # reviews刪除不必要符號，w/或w/o改為with或without，❤改為love
     if type(product['reviews']) == list:
-        lines =[]
+        lines = []
         for line in product['reviews']:
             line = line.replace('*', '').replace('❤', 'love').replace('❁', '').replace('\n', '').replace('🤔', '')
             line = line.replace("[This review was collected as part of a promotion.]", '')
