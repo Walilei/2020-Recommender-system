@@ -68,7 +68,7 @@ for product in product_list:
     if type(product['reviews']) == list:
         lines =[]
         for line in product['reviews']:
-            line = line.replace('*', '').replace('❤', '').replace('❁', '').replace('\n', '').replace('🤔', '')
+            line = line.replace('*', '').replace('❤', 'love').replace('❁', '').replace('\n', '').replace('🤔', '')
             line = line.replace("[This review was collected as part of a promotion.]", '')
             line = line.replace('w/', 'with').replace('w/o', 'without').replace('w/out', 'without')
             lines.append(line)
