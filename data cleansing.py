@@ -1,6 +1,7 @@
 import json
 from bs4 import BeautifulSoup
 import csv
+import requests
 
 with open('product_info_LA2.json', 'r', encoding="utf-8") as json_file:
     product_list = json.loads(json_file.read())
@@ -19,7 +20,7 @@ for product in product_list:
     product['keyword'] = product['keyword'].replace('™', '')
 
     # 用BS處理HTML編碼，修改產品名稱內的亂碼，並去除換行符號以及trade mark符號
-    product['name'] = BeautifulSoup(product['name'], 'lxml').text.replace('™', '')
+    product['name'] = BeautifulSoup(product['name'], 'lxml').text.replace('™', '').replace('”', '"').replace('’', '\'')
     product['name'] = product['name'].replace("&amp;", "&").replace('\n', '').strip(f"- {product['brand']}").strip(' ')
 
     # 價格修改，先去除$符號和千分位逗號方便清洗
@@ -32,8 +33,20 @@ for product in product_list:
             low_p = float(product['price'].partition('-')[0])
             high_p = float(product['price'].partition('-')[2])
             product['price'] = round((low_p + high_p) / 2, 2)
-        else:
-            continue
+        elif 'See low price in cart' in product['price']:  # 針對沒有直接價格的商品另外去網頁抓
+            product_id = product['url'].split('A-')[1]
+            store_key ='pricing_store_id=1357&key=6d881b79462e209a482ed5e6e52e1935d9633723'
+            url = f"https://redsky.target.com/web/pdp_location/v1/tcin/{product_id}?{store_key}"
+            data = requests.get(url).json()
+            if data.get('child_items'):
+                product['price'] = data['child_items'][-1]['price']['current_retail']
+            elif data.get('price'):
+                if data['price'].get('current_retail'):
+                    product['price'] = data['price']['current_retail']
+                else:
+                    continue
+            else:
+                continue
 
     # 把評分改為tuple
     product['star_ratings'] = tuple(product['star_ratings'])
